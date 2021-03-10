@@ -1,11 +1,19 @@
 import mongoose from "mongoose";
 import Coupon from "../models/coupon.js";
 
+export const getMyCoupons = async (req, res) => {
+  try {
+    const coupons = await Coupon.find({ user: req.userEmail });
+
+    res.status(200).json(coupons);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 export const getCoupons = async (req, res) => {
   try {
     const coupons = await Coupon.find();
-
-    console.log("trayendo data");
 
     res.status(200).json(coupons);
   } catch (error) {
@@ -16,7 +24,9 @@ export const getCoupons = async (req, res) => {
 export const createCoupon = async (req, res) => {
   const coupon = req.body;
 
-  const newCoupon = new Coupon(coupon);
+  if (!req.userId) return res.json({ message: "No autorizado" });
+
+  const newCoupon = new Coupon({ ...coupon, status: "Activo" });
 
   try {
     await newCoupon.save();

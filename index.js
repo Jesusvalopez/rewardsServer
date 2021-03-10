@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import couponsRoutes from "./routes/coupons.js";
+import userRoutes from "./routes/user.js";
 
 const app = express();
 dotenv.config();
@@ -12,9 +13,10 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 app.use("/coupons", couponsRoutes);
+app.use("/user", userRoutes);
 
 app.get("/", () => {
-  resizeBy.send("Hola");
+  res.send("Hola");
 });
 
 //connect mongodb
