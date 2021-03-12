@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: new Date(),
   },
+  profilePictureUrl: String,
 });
 
 const User = mongoose.model("User", userSchema);

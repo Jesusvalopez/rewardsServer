@@ -71,7 +71,7 @@ export const signUp = async (req, res) => {
 };
 
 export const googleSignUp = async (req, res) => {
-  const { email, name } = req.body.profile;
+  const { email, name, imageUrl } = req.body.profile;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -93,6 +93,7 @@ export const googleSignUp = async (req, res) => {
         password: hashedPassword,
         name: name,
         provider: "google",
+        profilePictureUrl: imageUrl,
       });
 
       const token = jwt.sign(
