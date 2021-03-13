@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema({
     default: new Date(),
   },
   profilePictureUrl: String,
+  points: Number,
 });
 
 const User = mongoose.model("User", userSchema);

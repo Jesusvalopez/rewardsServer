@@ -3,6 +3,7 @@ import express from "express";
 import {
   getCoupons,
   getMyCoupons,
+  getMyCouponsCount,
   createCoupon,
   updateCoupon,
   deleteCoupon,
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.get("/", auth, getCoupons);
 router.get("/my-coupons", auth, getMyCoupons);
+router.get("/my-coupons-count", auth, getMyCouponsCount);
 router.post("/", auth, createCoupon);
 router.patch("/:id", auth, updateCoupon);
 router.delete("/:id", auth, deleteCoupon);

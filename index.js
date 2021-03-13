@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import couponsRoutes from "./routes/coupons.js";
 import userRoutes from "./routes/user.js";
+import pointsRoutes from "./routes/points.js";
 
 const app = express();
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 app.use("/coupons", couponsRoutes);
+app.use("/points", pointsRoutes);
 app.use("/user", userRoutes);
 
 app.get("/", () => {
