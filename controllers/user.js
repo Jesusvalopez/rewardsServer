@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { createPointsMethod, updateUserPoints } from "./points.js";
 
 import User from "../models/user.js";
 
@@ -25,7 +26,7 @@ export const signIn = async (req, res) => {
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "8h" }
     );
 
     res.status(200).json({ result: existingUser, token });
@@ -60,7 +61,7 @@ export const signUp = async (req, res) => {
       { email: result.email, id: result._id },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "8h",
       }
     );
 
@@ -81,7 +82,7 @@ export const googleSignUp = async (req, res) => {
         { email: existingUser.email, id: existingUser._id },
         process.env.JWT_SECRET,
         {
-          expiresIn: "1h",
+          expiresIn: "8h",
         }
       );
 
@@ -94,15 +95,19 @@ export const googleSignUp = async (req, res) => {
         name: name,
         provider: "google",
         profilePictureUrl: imageUrl,
+        points: 0,
       });
 
       const token = jwt.sign(
         { email: result.email, id: result._id },
         process.env.JWT_SECRET,
         {
-          expiresIn: "1h",
+          expiresIn: "8h",
         }
       );
+
+      await createPointsMethod(result._id, 20, "Registro");
+      await updateUserPoints(result._id, 20);
 
       res.status(200).json({ result: result, token });
     }

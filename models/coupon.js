@@ -6,6 +6,7 @@ const couponSchema = mongoose.Schema({
   user: String,
   status: String,
   type: String,
+  minAmount: Number,
   createdAt: {
     type: Date,
     default: new Date(),

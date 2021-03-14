@@ -1,8 +1,69 @@
 import mongoose from "mongoose";
 import Coupon from "../models/coupon.js";
+import ExchangeCoupon from "../models/exchangeCoupon.js";
+import User from "../models/user.js";
+import { updateUserPoints, createPointsMethod } from "../controllers/points.js";
+
+export const exchangeCoupon = async (req, res) => {
+  try {
+    const exchangeCoupon = await ExchangeCoupon.findById({ _id: req.body.id });
+    const user = await User.findById({ _id: req.userId });
+
+    //si el cupon es token por ahora no hacer nada
+    //actualizar historial
+    //crear cupon
+
+    if (!user.points > exchangeCoupon.pointsToExchange)
+      res.status(404).json({
+        message: "No tienes suficientes puntos para canjear el cupón",
+      });
+
+    const updatedUser = await updateUserPoints(
+      user._id,
+      exchangeCoupon.pointsToExchange,
+      "DECREMENT"
+    );
+
+    //actualizar historial
+    const pointsHistory = await createPointsMethod(
+      user._id,
+      -Math.abs(exchangeCoupon.pointsToExchange),
+      "Canje " + exchangeCoupon.name
+    );
+
+    let date = new Date();
+
+    //crear cupon
+    await insertCoupon({
+      value: exchangeCoupon.value,
+      user: user.email,
+      type: exchangeCoupon.type,
+      minAmount: exchangeCoupon.minAmount,
+      expireDate: new Date(date.setMonth(date.getMonth() + 1)),
+    });
+
+    //CREAR CUPON EN WOOCOMMERCE
+
+    res
+      .status(200)
+      .json({ points: updatedUser.points, lastPoint: pointsHistory });
+  } catch (error) {}
+};
+export const getExchangeCoupons = async (req, res) => {
+  try {
+    const exchangeCoupons = await ExchangeCoupon.find();
+    const collections = Object.keys(mongoose.connection.collections);
+    console.log(collections);
+    console.log(exchangeCoupons);
+    res.status(200).json(exchangeCoupons);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 export const getMyCouponsCount = async (req, res) => {
   try {
+    console.log(req.userEmail);
     const coupons = await Coupon.find({ user: req.userEmail }).countDocuments();
 
     res.status(200).json(coupons);
@@ -34,16 +95,24 @@ export const getCoupons = async (req, res) => {
 export const createCoupon = async (req, res) => {
   const coupon = req.body;
 
-  if (!req.userId) return res.json({ message: "No autorizado" });
+  try {
+    newCoupon = await insertCoupon(coupon);
 
+    res.status(201).json(newCoupon);
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
+
+const insertCoupon = async (coupon) => {
   const newCoupon = new Coupon({ ...coupon, status: "Activo" });
 
   try {
     await newCoupon.save();
 
-    res.status(201).json(newCoupon);
+    return newCoupon;
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    console.log(error);
   }
 };
 
