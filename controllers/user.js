@@ -3,7 +3,31 @@ import jwt from "jsonwebtoken";
 import { createPointsMethod, updateUserPoints } from "./points.js";
 
 import User from "../models/user.js";
+import Coupon from "../models/coupon.js";
 
+export const getUsersCouponsTokens = async (req, res) => {
+  try {
+    console.log(req.body);
+    const coupons = await Coupon.find({ user: req.body.email });
+
+    res.status(200).json(coupons);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+export const getUsers = async (req, res) => {
+  try {
+    console.log(req.params.email);
+
+    const users = await User.find({
+      email: { $regex: req.params.email, $options: "i" },
+    }).select("email");
+
+    return res.status(200).json({ users });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
 export const signIn = async (req, res) => {
   const { email, password } = req.body;
 
