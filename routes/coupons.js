@@ -15,7 +15,7 @@ import auth from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/", auth, getCoupons);
-router.get("/my-coupons", auth, getMyCoupons);
+router.get("/my-coupons/:state", auth, getMyCoupons);
 router.get("/my-coupons-count", auth, getMyCouponsCount);
 router.get("/exchange-coupons", auth, getExchangeCoupons);
 router.post("/exchange-coupons", auth, exchangeCoupon);

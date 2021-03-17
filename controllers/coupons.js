@@ -51,11 +51,14 @@ export const exchangeCoupon = async (req, res) => {
 };
 export const getExchangeCoupons = async (req, res) => {
   try {
-    const exchangeCoupons = await ExchangeCoupon.find();
+    const exchangeCoupons = await ExchangeCoupon.find({
+      type: { $ne: "Token" },
+    });
     const collections = Object.keys(mongoose.connection.collections);
     console.log(collections);
     console.log(exchangeCoupons);
     res.status(200).json(exchangeCoupons);
+    setTimeout(function () {}, 1500);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -64,7 +67,13 @@ export const getExchangeCoupons = async (req, res) => {
 export const getMyCouponsCount = async (req, res) => {
   try {
     console.log(req.userEmail);
-    const coupons = await Coupon.find({ user: req.userEmail }).countDocuments();
+    const coupons = await Coupon.find({
+      user: req.userEmail,
+      type: { $ne: "Token" },
+      deletedAt: { $eq: null },
+      isExpired: { $eq: false },
+      isUsed: { $eq: false },
+    }).countDocuments();
 
     res.status(200).json(coupons);
   } catch (error) {
@@ -73,8 +82,45 @@ export const getMyCouponsCount = async (req, res) => {
 };
 
 export const getMyCoupons = async (req, res) => {
+  const state = req.params.state;
+
+  let findObject = {
+    user: req.userEmail,
+    type: { $ne: "Token" },
+    deletedAt: { $eq: null },
+    isExpired: { $eq: false },
+    isUsed: { $eq: false },
+  };
+
   try {
-    const coupons = await Coupon.find({ user: req.userEmail });
+    switch (state) {
+      case "active": {
+        findObject = {
+          ...findObject,
+          isExpired: { $eq: false },
+          isUsed: { $eq: false },
+        };
+        break;
+      }
+      case "used": {
+        findObject = {
+          ...findObject,
+          isUsed: { $eq: true },
+        };
+        break;
+      }
+      case "expired": {
+        findObject = {
+          ...findObject,
+          isExpired: { $eq: true },
+        };
+        break;
+      }
+    }
+
+    const coupons = await Coupon.find(findObject);
+
+    console.log(coupons);
 
     res.status(200).json(coupons);
   } catch (error) {
@@ -105,7 +151,7 @@ export const createCoupon = async (req, res) => {
 };
 
 const insertCoupon = async (coupon) => {
-  const newCoupon = new Coupon({ ...coupon, status: "Activo" });
+  const newCoupon = new Coupon(coupon);
 
   try {
     await newCoupon.save();

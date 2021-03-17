@@ -4,7 +4,6 @@ const couponSchema = mongoose.Schema({
   value: Number,
   creator: String,
   user: String,
-  status: String,
   type: String,
   minAmount: Number,
   createdAt: {
@@ -14,6 +13,10 @@ const couponSchema = mongoose.Schema({
   expireDate: {
     type: Date,
   },
+  isExpired: { type: Boolean, default: false },
+  isUsed: { type: Boolean, default: false },
+  usedAt: Date,
+  deletedAt: Date,
 });
 
 const Coupon = mongoose.model("Coupon", couponSchema);

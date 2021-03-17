@@ -8,7 +8,12 @@ import Coupon from "../models/coupon.js";
 export const getUsersCouponsTokens = async (req, res) => {
   try {
     console.log(req.body);
-    const coupons = await Coupon.find({ user: req.body.email });
+    const coupons = await Coupon.find({
+      user: req.body.email,
+      deletedAt: { $eq: null },
+      isExpired: { $eq: false },
+      isUsed: { $eq: false },
+    });
 
     res.status(200).json(coupons);
   } catch (error) {
