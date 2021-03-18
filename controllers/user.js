@@ -4,6 +4,39 @@ import { createPointsMethod, updateUserPoints } from "./points.js";
 
 import User from "../models/user.js";
 import Coupon from "../models/coupon.js";
+import ApiKey from "../models/apiKey.js";
+import crypto from "crypto";
+
+export const generateApiKey = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    const API_KEY = crypto
+      .createHmac("sha1", user._id.toString())
+      .update(Date.now().toString())
+      .digest("hex");
+
+    const API_SECRET = crypto
+      .createHmac("sha1", API_KEY)
+      .update(Date.now().toString())
+      .digest("hex");
+
+    const DATABASE_KEY_SECRET = crypto
+      .createHmac("sha1", API_KEY)
+      .update(API_SECRET)
+      .digest("hex");
+
+    await ApiKey.create({
+      userId: req.userId,
+      apiKey: API_KEY,
+      apiSecret: DATABASE_KEY_SECRET,
+    });
+
+    res.status(200).json({ API_KEY, API_SECRET });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
 
 export const getUsersCouponsTokens = async (req, res) => {
   try {

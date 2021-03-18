@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import couponsRoutes from "./routes/coupons.js";
 import userRoutes from "./routes/user.js";
 import pointsRoutes from "./routes/points.js";
+import apiV1Routes from "./routes/API/V1/api.js";
 
 const app = express();
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors());
 app.use("/coupons", couponsRoutes);
 app.use("/points", pointsRoutes);
 app.use("/user", userRoutes);
+app.use("/v1", apiV1Routes);
 
 app.get("/", () => {
   res.send("Hola");
