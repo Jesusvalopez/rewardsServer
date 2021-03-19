@@ -122,7 +122,7 @@ export const createPointsMethod = async (
     user_id,
     value,
     description,
-    expireDate: new Date(date.setMonth(date.getMonth() + 1)),
+    expireDate: new Date(date.setMonth(date.getMonth() + 2)),
     createdAt: new Date(),
   };
 

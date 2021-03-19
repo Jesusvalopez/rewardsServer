@@ -11,6 +11,7 @@ const pointsSchema = mongoose.Schema({
   expireDate: {
     type: Date,
   },
+  isExpired: { type: Boolean, default: false },
 });
 
 const Points = mongoose.model("Points", pointsSchema);

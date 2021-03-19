@@ -55,8 +55,7 @@ export const getExchangeCoupons = async (req, res) => {
       type: { $ne: "Token" },
     });
     const collections = Object.keys(mongoose.connection.collections);
-    console.log(collections);
-    console.log(exchangeCoupons);
+
     res.status(200).json(exchangeCoupons);
     setTimeout(function () {}, 1500);
   } catch (error) {
@@ -150,7 +149,7 @@ export const createCoupon = async (req, res) => {
   }
 };
 
-const insertCoupon = async (coupon) => {
+export const insertCoupon = async (coupon) => {
   const newCoupon = new Coupon(coupon);
 
   try {

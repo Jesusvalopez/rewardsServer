@@ -1,4 +1,15 @@
 import mongoose from "mongoose";
+import voucher_codes from "voucher-code-generator";
+import postCreate from "./plugins/postCreate.js";
+import { createWoocommerceCoupon } from "../controllers/API/V1/api.js";
+
+const generateCode = () => {
+  return voucher_codes.generate({
+    length: 8,
+    count: 1,
+    charset: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+  })[0];
+};
 
 const couponSchema = mongoose.Schema({
   value: Number,
@@ -17,6 +28,14 @@ const couponSchema = mongoose.Schema({
   isUsed: { type: Boolean, default: false },
   usedAt: Date,
   deletedAt: Date,
+  code: { type: String, default: generateCode() },
+});
+
+couponSchema.plugin(postCreate);
+
+couponSchema.addPostCreate(function (coupon, cb) {
+  createWoocommerceCoupon(coupon);
+  return cb(null);
 });
 
 const Coupon = mongoose.model("Coupon", couponSchema);

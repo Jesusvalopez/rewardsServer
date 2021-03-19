@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createPointsMethod, updateUserPoints } from "./points.js";
+import { insertCoupon } from "./coupons.js";
 
 import User from "../models/user.js";
 import Coupon from "../models/coupon.js";
@@ -133,6 +134,18 @@ export const signUp = async (req, res) => {
   }
 };
 
+const addRegisterCoupons = async (email) => {
+  let date = new Date();
+
+  await insertCoupon({
+    value: 2000,
+    user: email,
+    type: "Coupon",
+    minAmount: 6990,
+    expireDate: new Date(date.setDate(date.getDate() + 7)),
+  });
+};
+
 export const googleSignUp = async (req, res) => {
   const { email, name, imageUrl } = req.body.profile;
 
@@ -170,6 +183,7 @@ export const googleSignUp = async (req, res) => {
 
       await createPointsMethod(result._id, 20, "Registro");
       await updateUserPoints(result._id, 20);
+      await addRegisterCoupons(email);
 
       res.status(200).json({ result: result, token });
     }

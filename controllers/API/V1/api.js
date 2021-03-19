@@ -1,5 +1,6 @@
 import User from "../../../models/user.js";
 import Coupon from "../../../models/coupon.js";
+import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 
 export const getUsersCoupons = async (req, res) => {
   try {
@@ -30,4 +31,37 @@ export const getUsersByEmail = async (req, res) => {
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
+};
+
+export const createWoocommerceCoupon = (coupon) => {
+  const api = new WooCommerceRestApi.default({
+    url: process.env.WOOCOMMERCE_STORE_URL,
+    consumerKey: process.env.WOOCOMMERCE_CONSUMER_KEY,
+    consumerSecret: process.env.WOOCOMMERCE_CONSUMER_SECRET,
+    version: "wc/v3",
+  });
+
+  const couponData = {
+    code: coupon.code,
+    discount_type: "fixed_cart",
+    amount: coupon.value.toString(),
+    individual_use: true,
+    exclude_sale_items: true,
+    minimum_amount: coupon.minAmount.toString(),
+    individual_use: true,
+    usage_limit: 1,
+    usage_limit_per_user: 1,
+    date_expires: coupon.expireDate,
+    free_shipping: false,
+    email_restrictions: [coupon.user],
+  };
+
+  api
+    .post("coupons", couponData)
+    .then((response) => {
+      //console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+    });
 };
