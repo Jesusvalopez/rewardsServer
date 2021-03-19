@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Points from "../models/points.js";
 import User from "../models/user.js";
+import Coupon from "../models/coupon.js";
 
 export const getMyPoints = async (req, res) => {
   const perPage = 15,
@@ -41,17 +42,45 @@ const getPointsByAmount = (sale_total_amount) => {
 };
 
 export const createPoints = async (req, res) => {
-  const { user_id, sale_total_amount, description, sale_id } = req.body;
+  const {
+    user_id,
+    sale_total_amount,
+    description,
+    sale_id,
+    coupons_ids,
+  } = req.body;
 
   const value = getPointsByAmount(sale_total_amount);
 
   try {
     await createPointsMethod(user_id, value, description, sale_id);
     await updateUserPoints(user_id, value);
+    if (coupons_ids) {
+      await useCoupons(coupons_ids);
+    }
     res.status(201).json({ message: "Puntos creados con éxito" });
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
+};
+
+const useCoupons = async (coupons_ids) => {
+  try {
+    await Promise.all(
+      coupons_ids.map(async (coupon) => {
+        const couponFind = await Coupon.findByIdAndUpdate(
+          {
+            _id: coupon.value,
+          },
+          {
+            isUsed: true,
+            usedAt: new Date(),
+          },
+          { new: true }
+        );
+      })
+    );
+  } catch (error) {}
 };
 
 export const updateUserPoints = async (
