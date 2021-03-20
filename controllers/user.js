@@ -118,6 +118,7 @@ export const signUp = async (req, res) => {
       password: hashedPassword,
       name: firstName + " " + lastName,
       provider: "local",
+      points: 0,
     });
 
     const token = jwt.sign(
@@ -127,6 +128,10 @@ export const signUp = async (req, res) => {
         expiresIn: "8h",
       }
     );
+
+    await createPointsMethod(result._id, 20, "Registro");
+    await updateUserPoints(result._id, 20);
+    await addRegisterCoupons(email);
 
     res.status(200).json({ result: result, token });
   } catch (error) {

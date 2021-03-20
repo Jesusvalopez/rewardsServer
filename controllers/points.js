@@ -78,6 +78,8 @@ const useCoupons = async (coupons_ids) => {
           },
           { new: true }
         );
+
+        //Usar el cupón también en Woocommerce, actualizar el uso a 1.
       })
     );
   } catch (error) {}
