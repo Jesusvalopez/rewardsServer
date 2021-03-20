@@ -151,6 +151,55 @@ const addRegisterCoupons = async (email) => {
   });
 };
 
+export const facebookSignUp = async (req, res) => {
+  const { name, email, picture } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      const token = jwt.sign(
+        { email: existingUser.email, id: existingUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "8h",
+        }
+      );
+
+      res.status(200).json({ result: existingUser, token });
+    } else {
+      const pass = crypto
+        .createHmac("sha1", email)
+        .update(Date.now().toString())
+        .digest("hex");
+      const hashedPassword = await bcrypt.hash(pass, 12);
+      const result = await User.create({
+        email,
+        password: hashedPassword,
+        name: name,
+        provider: "facebook",
+        profilePictureUrl: picture.data.url,
+        points: 0,
+      });
+
+      const token = jwt.sign(
+        { email: result.email, id: result._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "8h",
+        }
+      );
+
+      await createPointsMethod(result._id, 20, "Registro");
+      await updateUserPoints(result._id, 20);
+      await addRegisterCoupons(email);
+
+      res.status(200).json({ result: result, token });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Algo salió mal", error: error.message });
+  }
+};
 export const googleSignUp = async (req, res) => {
   const { email, name, imageUrl } = req.body.profile;
 
@@ -168,7 +217,11 @@ export const googleSignUp = async (req, res) => {
 
       res.status(200).json({ result: existingUser, token });
     } else {
-      const hashedPassword = await bcrypt.hash("xaasjkaksjdasd", 12);
+      const pass = crypto
+        .createHmac("sha1", email)
+        .update(Date.now().toString())
+        .digest("hex");
+      const hashedPassword = await bcrypt.hash(pass, 12);
       const result = await User.create({
         email,
         password: hashedPassword,
