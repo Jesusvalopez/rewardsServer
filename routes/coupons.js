@@ -20,6 +20,7 @@ router.get("/my-coupons-count", auth, getMyCouponsCount);
 router.get("/exchange-coupons", auth, getExchangeCoupons);
 router.post("/exchange-coupons", auth, exchangeCoupon);
 router.post("/", auth, createCoupon);
+//router.post("/", createCoupon);
 router.patch("/:id", auth, updateCoupon);
 router.delete("/:id", auth, deleteCoupon);
 

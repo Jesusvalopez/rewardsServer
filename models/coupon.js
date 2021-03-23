@@ -3,12 +3,14 @@ import voucher_codes from "voucher-code-generator";
 import postCreate from "./plugins/postCreate.js";
 import { createWoocommerceCoupon } from "../controllers/API/V1/api.js";
 
-const generateCode = () => {
-  return voucher_codes.generate({
+let generateCode = () => {
+  let v = voucher_codes.generate({
     length: 8,
     count: 1,
     charset: "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
-  })[0];
+  });
+
+  return v[0];
 };
 
 const couponSchema = mongoose.Schema({
@@ -19,7 +21,7 @@ const couponSchema = mongoose.Schema({
   minAmount: Number,
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: () => new Date(),
   },
   expireDate: {
     type: Date,
@@ -28,13 +30,14 @@ const couponSchema = mongoose.Schema({
   isUsed: { type: Boolean, default: false },
   usedAt: Date,
   deletedAt: Date,
-  code: { type: String, default: generateCode() },
+  code: { type: String, default: () => generateCode() },
 });
 
 couponSchema.plugin(postCreate);
 
 couponSchema.addPostCreate(function (coupon, cb) {
   createWoocommerceCoupon(coupon);
+
   return cb(null);
 });
 

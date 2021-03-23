@@ -6,7 +6,7 @@ const apiKeySchema = mongoose.Schema({
   apiSecret: { type: String, required: true },
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: () => new Date(),
   },
 });
 

@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
   provider: { type: String, required: true },
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: () => new Date(),
   },
   profilePictureUrl: String,
   points: Number,

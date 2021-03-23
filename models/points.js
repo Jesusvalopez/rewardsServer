@@ -6,7 +6,7 @@ const pointsSchema = mongoose.Schema({
   description: String,
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: () => new Date(),
   },
   expireDate: {
     type: Date,
