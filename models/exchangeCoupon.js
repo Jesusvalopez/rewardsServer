@@ -6,6 +6,8 @@ const exchangeCouponSchema = mongoose.Schema({
   minAmount: Number,
   type: String,
   pointsToExchange: Number,
+  wheeleable: Boolean,
+  order: Number,
 });
 
 const ExchangeCoupon = mongoose.model("ExchangeCoupon", exchangeCouponSchema);

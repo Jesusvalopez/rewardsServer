@@ -8,6 +8,17 @@ import Coupon from "../models/coupon.js";
 import ApiKey from "../models/apiKey.js";
 import crypto from "crypto";
 
+export const updateUserCommune = async (req, res) => {
+  try {
+    const commune = req.body.commune;
+
+    await User.findByIdAndUpdate({ _id: req.userId }, { commune: commune });
+    res.status(200).json({ commune: commune, message: "Comuna actualizada" });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 export const generateApiKey = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
@@ -143,10 +154,10 @@ const addRegisterCoupons = async (email) => {
   let date = new Date();
 
   await insertCoupon({
-    value: 2000,
+    value: 0,
     user: email,
-    type: "Coupon",
-    minAmount: 6990,
+    type: "Token",
+    minAmount: 0,
     expireDate: new Date(date.setDate(date.getDate() + 7)),
   });
 };

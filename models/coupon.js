@@ -36,7 +36,9 @@ const couponSchema = mongoose.Schema({
 couponSchema.plugin(postCreate);
 
 couponSchema.addPostCreate(function (coupon, cb) {
-  createWoocommerceCoupon(coupon);
+  if (coupon.type !== "Token") {
+    createWoocommerceCoupon(coupon);
+  }
 
   return cb(null);
 });

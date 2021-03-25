@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
   },
   profilePictureUrl: String,
   points: Number,
+  commune: String,
 });
 
 const User = mongoose.model("User", userSchema);

@@ -53,7 +53,7 @@ export const getExchangeCoupons = async (req, res) => {
   try {
     const exchangeCoupons = await ExchangeCoupon.find({
       type: { $ne: "Token" },
-    });
+    }).sort({ order: 1 });
     const collections = Object.keys(mongoose.connection.collections);
 
     res.status(200).json(exchangeCoupons);
@@ -65,7 +65,7 @@ export const getExchangeCoupons = async (req, res) => {
 
 export const getMyCouponsCount = async (req, res) => {
   try {
-    console.log(req.userEmail);
+    // console.log(req.userEmail);
     const coupons = await Coupon.find({
       user: req.userEmail,
       type: { $ne: "Token" },
@@ -74,7 +74,15 @@ export const getMyCouponsCount = async (req, res) => {
       isUsed: { $eq: false },
     }).countDocuments();
 
-    res.status(200).json(coupons);
+    const tokens = await Coupon.find({
+      user: req.userEmail,
+      type: { $eq: "Token" },
+      deletedAt: { $eq: null },
+      isExpired: { $eq: false },
+      isUsed: { $eq: false },
+    }).countDocuments();
+
+    res.status(200).json({ coupons, tokens });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

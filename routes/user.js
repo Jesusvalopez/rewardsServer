@@ -8,6 +8,7 @@ import {
   getUsersCouponsTokens,
   generateApiKey,
   facebookSignUp,
+  updateUserCommune,
 } from "../controllers/user.js";
 import auth from "../middleware/auth.js";
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post("/facebook-signup", facebookSignUp);
 router.get("/get-users/:email", auth, getUsers);
 router.get("/generate-api-key", auth, generateApiKey);
 router.post("/get-coupons-tokens", auth, getUsersCouponsTokens);
+router.post("/update-commune", auth, updateUserCommune);
 
 export default router;

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import couponsRoutes from "./routes/coupons.js";
 import userRoutes from "./routes/user.js";
 import pointsRoutes from "./routes/points.js";
+import wheelRoutes from "./routes/wheel.js";
 import apiV1Routes from "./routes/API/V1/api.js";
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use("/coupons", couponsRoutes);
 app.use("/points", pointsRoutes);
 app.use("/user", userRoutes);
+app.use("/wheel", wheelRoutes);
 app.use("/v1", apiV1Routes);
 
 app.get("/", () => {
