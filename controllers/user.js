@@ -163,7 +163,7 @@ const addRegisterCoupons = async (email) => {
 };
 
 export const facebookSignUp = async (req, res) => {
-  const { name, email, picture } = req.body;
+  const { first_name, email } = req.user._json;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -177,7 +177,8 @@ export const facebookSignUp = async (req, res) => {
         }
       );
 
-      res.status(200).json({ result: existingUser, token });
+      return { result: existingUser, token };
+      // res.status(200).json({ result: existingUser, token });
     } else {
       const pass = crypto
         .createHmac("sha1", email)
@@ -187,9 +188,8 @@ export const facebookSignUp = async (req, res) => {
       const result = await User.create({
         email,
         password: hashedPassword,
-        name: name,
+        name: first_name,
         provider: "facebook",
-        profilePictureUrl: picture.data.url,
         points: 0,
       });
 
@@ -205,6 +205,7 @@ export const facebookSignUp = async (req, res) => {
       await updateUserPoints(result._id, 20);
       await addRegisterCoupons(email);
 
+      return { result: result, token };
       res.status(200).json({ result: result, token });
     }
   } catch (error) {
