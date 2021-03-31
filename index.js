@@ -30,6 +30,7 @@ passport.use(
       callbackURL: "/passport/google/redirect",
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      proxy: true,
     },
     (accessToken, refreshToken, profile, done) => {
       done(null, profile);
@@ -65,7 +66,7 @@ app.get(
   }
 );
 
-app.get("/", () => {
+app.get("/", (req, res) => {
   res.send("Hola");
 });
 
