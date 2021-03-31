@@ -19,7 +19,8 @@ export const getMyPoints = async (req, res) => {
       });
 
     const user = await User.findById({ _id: req.userId });
-
+    console.log(user);
+    console.log(req.userId);
     res.status(200).json({ points: points, pointsTotal: user.points });
   } catch (error) {
     res.status(404).json({ message: error.message });
