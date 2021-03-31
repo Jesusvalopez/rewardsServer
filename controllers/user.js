@@ -211,8 +211,8 @@ export const facebookSignUp = async (req, res) => {
     res.status(500).json({ message: "Algo salió mal", error: error.message });
   }
 };
-export const googleSignUp = async (req, res) => {
-  const { email, name, imageUrl } = req.body.profile;
+export const googleSignUp = async (req) => {
+  const { name, email } = req.user._json;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -225,7 +225,7 @@ export const googleSignUp = async (req, res) => {
           expiresIn: "8h",
         }
       );
-
+      return { result: existingUser, token };
       res.status(200).json({ result: existingUser, token });
     } else {
       const pass = crypto
@@ -238,7 +238,7 @@ export const googleSignUp = async (req, res) => {
         password: hashedPassword,
         name: name,
         provider: "google",
-        profilePictureUrl: imageUrl,
+
         points: 0,
       });
 
@@ -253,7 +253,7 @@ export const googleSignUp = async (req, res) => {
       await createPointsMethod(result._id, 20, "Registro");
       await updateUserPoints(result._id, 20);
       await addRegisterCoupons(email);
-
+      return { result: result, token };
       res.status(200).json({ result: result, token });
     }
   } catch (error) {

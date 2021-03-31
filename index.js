@@ -7,9 +7,35 @@ import userRoutes from "./routes/user.js";
 import pointsRoutes from "./routes/points.js";
 import wheelRoutes from "./routes/wheel.js";
 import apiV1Routes from "./routes/API/V1/api.js";
+import { googleSignUp } from "./controllers/user.js";
+import querystring from "querystring";
 
 const app = express();
 dotenv.config();
+
+import passport from "passport";
+import GoogleStrategy from "passport-google-oauth20";
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.use(
+  new GoogleStrategy(
+    {
+      callbackURL: "/passport/google/redirect",
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      done(null, profile);
+    }
+  )
+);
 
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
@@ -20,6 +46,24 @@ app.use("/points", pointsRoutes);
 app.use("/user", userRoutes);
 app.use("/wheel", wheelRoutes);
 app.use("/v1", apiV1Routes);
+app.use(passport.initialize());
+
+app.get(
+  "/passport/google/redirect",
+  passport.authenticate("google"),
+  async (req, res) => {
+    const response = await googleSignUp(req);
+
+    const string_response = encodeURIComponent(JSON.stringify(response));
+    console.log(string_response);
+    const ab = Buffer.from(string_response).toString("base64");
+
+    //res.redirect("http://localhost:3000/auth/google/redirect?token=" + ab);
+    res.redirect("https://rewards.sticks.cl/auth/google/redirect?token=" + ab);
+
+    // res.send("you reached the callback url");
+  }
+);
 
 app.get("/", () => {
   res.send("Hola");
