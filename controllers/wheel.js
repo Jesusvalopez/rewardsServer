@@ -31,13 +31,28 @@ export const getWheelPrize = async (req, res) => {
 
     let date = new Date();
 
-    await insertCoupon({
+    const couponData = {
       value: exchangeCoupons[winner].value,
       user: req.userEmail,
       type: exchangeCoupons[winner].type,
       minAmount: exchangeCoupons[winner].minAmount,
       expireDate: new Date(date.setDate(date.getDate() + 7)),
-    });
+    };
+
+    const woocommerceIds = exchangeCoupons[winner].woocommerceIds;
+    const storeAdministratorIds = exchangeCoupons[winner].storeAdministratorIds;
+    const couponName = exchangeCoupons[winner].name;
+    let newCouponData =
+      exchangeCoupons[winner].type === "Product"
+        ? {
+            ...couponData,
+            woocommerceIds,
+            storeAdministratorIds,
+            name: couponName,
+          }
+        : couponData;
+
+    await insertCoupon(newCouponData);
 
     res.status(200).json({
       winner,
