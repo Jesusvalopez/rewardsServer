@@ -45,7 +45,7 @@ export const exchangeCoupon = async (req, res) => {
     const woocommerceIds = exchangeCoupon.woocommerceIds;
     const storeAdministratorIds = exchangeCoupon.storeAdministratorIds;
     const couponName = exchangeCoupon.name;
-    let newCouponData =
+    let newCouponDatas =
       exchangeCoupon.type === "Product"
         ? {
             ...couponData,
@@ -56,7 +56,8 @@ export const exchangeCoupon = async (req, res) => {
         : couponData;
 
     console.log(exchangeCoupon);
-    console.log(newCouponData);
+    console.log("WENOOO:");
+    console.log(newCouponDatas);
 
     //crear cupon
     await insertCoupon(newCouponData);
