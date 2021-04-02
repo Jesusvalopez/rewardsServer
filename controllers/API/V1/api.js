@@ -61,14 +61,14 @@ export const createWoocommerceCoupon = (coupon) => {
       ? {
           ...couponData,
           discount_type: "fixed_product",
-          products_ids: coupon.woocomerceIds,
+          product_ids: coupon.woocommerceIds,
         }
       : couponData;
 
   api
     .post("coupons", newCouponData)
     .then((response) => {
-      //console.log(response.data);
+      console.log(response.data);
     })
     .catch((error) => {
       console.log(error.response.data);

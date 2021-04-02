@@ -54,19 +54,18 @@ export const exchangeCoupon = async (req, res) => {
             name: couponName,
           }
         : couponData;
-    console.log(newCouponDatas);
-    console.log("WENOOO:");
-    console.log(exchangeCoupon);
 
     //crear cupon
-    await insertCoupon(newCouponData);
+    await insertCoupon(newCouponDatas);
 
-    //CREAR CUPON EN WOOCOMMERCE
+    //CREAR CUPON EN WOOCOMMERCEe
 
     res
       .status(200)
       .json({ points: updatedUser.points, lastPoint: pointsHistory });
-  } catch (error) {}
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 export const getExchangeCoupons = async (req, res) => {
   try {
