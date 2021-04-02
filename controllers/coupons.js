@@ -33,14 +33,34 @@ export const exchangeCoupon = async (req, res) => {
 
     let date = new Date();
 
-    //crear cupon
-    await insertCoupon({
+    let couponData = {
       value: exchangeCoupon.value,
       user: user.email,
       type: exchangeCoupon.type,
       minAmount: exchangeCoupon.minAmount,
       expireDate: new Date(date.setMonth(date.getMonth() + 1)),
-    });
+    };
+
+    //let newModel = sale_id ? { ...pointsModel, sale_id } : pointsModel;
+    const woocommerceIds = exchangeCoupon.woocommerceIds;
+    const storeAdministratorIds = exchangeCoupon.storeAdministratorIds;
+    const couponName = exchangeCoupon.name;
+    let newCouponData =
+      exchangeCoupon.type === "Product"
+        ? {
+            ...couponData,
+            woocommerceIds,
+            storeAdministratorIds,
+            name: couponName,
+          }
+        : couponData;
+
+    console.log(exchangeCoupon);
+    console.log(exchangeCoupon.value);
+    console.log(exchangeCoupon.woocommerceIds);
+    console.log(exchangeCoupon.storeAdministratorIds);
+    //crear cupon
+    await insertCoupon(newCouponData);
 
     //CREAR CUPON EN WOOCOMMERCE
 

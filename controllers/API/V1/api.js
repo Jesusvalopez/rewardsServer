@@ -56,8 +56,17 @@ export const createWoocommerceCoupon = (coupon) => {
     email_restrictions: [coupon.user],
   };
 
+  const newCouponData =
+    coupon.type === "Product"
+      ? {
+          ...couponData,
+          discount_type: "fixed_product",
+          products_ids: coupon.woocomerceIds,
+        }
+      : couponData;
+
   api
-    .post("coupons", couponData)
+    .post("coupons", newCouponData)
     .then((response) => {
       //console.log(response.data);
     })

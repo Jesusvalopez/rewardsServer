@@ -8,6 +8,8 @@ const exchangeCouponSchema = mongoose.Schema({
   pointsToExchange: Number,
   wheeleable: Boolean,
   order: Number,
+  woocommerceIds: Array,
+  storeAdministratorIds: Array,
 });
 
 const ExchangeCoupon = mongoose.model("ExchangeCoupon", exchangeCouponSchema);

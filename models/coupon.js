@@ -16,6 +16,7 @@ let generateCode = () => {
 const couponSchema = mongoose.Schema({
   value: Number,
   creator: String,
+  name: String,
   user: String,
   type: String,
   minAmount: Number,
@@ -31,6 +32,8 @@ const couponSchema = mongoose.Schema({
   usedAt: Date,
   deletedAt: Date,
   code: { type: String, default: () => generateCode() },
+  woocommerceIds: Array,
+  storeAdministratorIds: Array,
 });
 
 couponSchema.plugin(postCreate);

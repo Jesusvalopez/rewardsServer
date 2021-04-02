@@ -7,9 +7,6 @@ export const getMyPoints = async (req, res) => {
   const perPage = 15,
     page = Math.max(0, req.query.page);
 
-  console.log(perPage);
-  console.log(req.query.page);
-
   try {
     const points = await Points.find({ user_id: req.userId })
       .limit(perPage)
@@ -19,8 +16,7 @@ export const getMyPoints = async (req, res) => {
       });
 
     const user = await User.findById({ _id: req.userId });
-    console.log(user);
-    console.log(req.userId);
+
     res.status(200).json({ points: points, pointsTotal: user.points });
   } catch (error) {
     res.status(404).json({ message: error.message });
