@@ -54,10 +54,9 @@ export const exchangeCoupon = async (req, res) => {
             name: couponName,
           }
         : couponData;
-
-    console.log(exchangeCoupon);
-    console.log("WENOOO:");
     console.log(newCouponDatas);
+    console.log("WENOOO:");
+    console.log(exchangeCoupon);
 
     //crear cupon
     await insertCoupon(newCouponData);
