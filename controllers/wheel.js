@@ -23,7 +23,7 @@ export const getWheelPrize = async (req, res) => {
 
     //crear cupon aca.
 
-    const notRandomNumbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 2];
+    const notRandomNumbers = [0, 0, 1, 1, 1, 2, 2, 2, 2, 2];
     const idx = Math.floor(Math.random() * notRandomNumbers.length);
     const winner = notRandomNumbers[idx];
 
