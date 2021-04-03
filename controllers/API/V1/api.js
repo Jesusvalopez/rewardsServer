@@ -62,6 +62,7 @@ export const createWoocommerceCoupon = (coupon) => {
           ...couponData,
           discount_type: "fixed_product",
           product_ids: coupon.woocommerceIds,
+          limit_usage_to_x_items: 1,
         }
       : couponData;
 
