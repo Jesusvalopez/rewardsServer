@@ -164,10 +164,11 @@ const addRegisterCoupons = async (email) => {
 
 export const facebookSignUp = async (req, res) => {
   const { first_name, email } = req.user._json;
-
+  console.log(first_name);
+  console.log(email);
   try {
     const existingUser = await User.findOne({ email });
-
+    console.log(existingUser);
     if (existingUser) {
       const token = jwt.sign(
         { email: existingUser.email, id: existingUser._id },
@@ -180,6 +181,7 @@ export const facebookSignUp = async (req, res) => {
       return { result: existingUser, token };
       // res.status(200).json({ result: existingUser, token });
     } else {
+      console.log("no existe");
       const pass = crypto
         .createHmac("sha1", email)
         .update(Date.now().toString())
