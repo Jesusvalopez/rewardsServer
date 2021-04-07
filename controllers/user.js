@@ -209,7 +209,7 @@ export const facebookSignUp = async (req, res) => {
       res.status(200).json({ result: result, token });
     }
   } catch (error) {
-    res.status(500).json({ message: "Algo salió mal", error: error.message });
+    console.log({ message: "Algo salió mal", error: error.message });
   }
 };
 export const googleSignUp = async (req) => {
