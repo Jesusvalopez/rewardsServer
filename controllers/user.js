@@ -164,6 +164,7 @@ const addRegisterCoupons = async (email) => {
 
 export const facebookSignUp = async (req, res) => {
   const { first_name, email } = req.user._json;
+  console.log(req.user._json);
   console.log(first_name);
   console.log(email);
   try {
