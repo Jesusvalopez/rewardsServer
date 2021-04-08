@@ -52,10 +52,11 @@ export const getWheelPrize = async (req, res) => {
           }
         : couponData;
 
-    await insertCoupon(newCouponData);
+    const coupon = await insertCoupon(newCouponData);
 
     res.status(200).json({
       winner,
+      coupon,
     });
   } catch (error) {}
 };
