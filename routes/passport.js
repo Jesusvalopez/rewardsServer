@@ -26,7 +26,7 @@ router.get(
 
     //res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
     res.redirect(
-      "https://rewards.sticks.cl/auth/redirect?token=" + base64Response
+      "https://premios.sticks.cl/auth/redirect?token=" + base64Response
     );
   }
 );
@@ -41,9 +41,9 @@ router.get(
 
     const base64Response = Buffer.from(stringResponse).toString("base64");
 
-    // res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
+    //   res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
     res.redirect(
-      "https://rewards.sticks.cl/auth/redirect?token=" + base64Response
+      "https://premios.sticks.cl/auth/redirect?token=" + base64Response
     );
   }
 );
