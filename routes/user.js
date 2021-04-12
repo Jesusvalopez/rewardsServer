@@ -8,8 +8,15 @@ import {
 } from "../controllers/user.js";
 import auth from "../middleware/auth.js";
 
+import User from "../models/user.js";
+
 const router = express.Router();
 
+router.get("/get-users-count/", async (req, res) => {
+  const usersCount = await User.find().countDocuments();
+
+  res.send({ usersCount });
+});
 router.get("/get-users/:email", auth, getUsers);
 router.get("/generate-api-key", auth, generateApiKey);
 router.post("/get-coupons-tokens", auth, getUsersCouponsTokens);

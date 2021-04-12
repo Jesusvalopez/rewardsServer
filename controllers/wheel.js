@@ -10,6 +10,23 @@ export const getWheelPrize = async (req, res) => {
     }).sort({ order: 1 });
 
     //calcular el winner y crear un cupon de ese tipo
+    //si no tiene token no dejarlo girar
+    const token = await Coupon.findOne({
+      user: req.userEmail,
+      type: { $eq: "Token" },
+      deletedAt: { $eq: null },
+      isExpired: { $eq: false },
+      isUsed: { $eq: false },
+    });
+
+    if (!token) {
+      res.status(200).json({
+        winner: null,
+        coupon: null,
+        message: "No tienes tokens para girar la ruleta",
+      });
+    }
+
     const tokens = await Coupon.findOneAndUpdate(
       {
         user: req.userEmail,
@@ -23,10 +40,26 @@ export const getWheelPrize = async (req, res) => {
 
     //crear cupon aca.
 
-    const notRandomNumbers = [0, 0, 1, 1, 1, 2, 2, 2, 2, 2];
+    const notRandomNumbers = [];
+
+    const generate = [
+      { position: 0, quantity: 10 },
+      { position: 1, quantity: 10 },
+      { position: 2, quantity: 50 },
+      { position: 3, quantity: 30 },
+    ];
+
+    generate.map((obj) => {
+      for (let i = 0; i < obj.quantity; i++) {
+        notRandomNumbers.push(obj.position);
+      }
+    });
+
     const idx = Math.floor(Math.random() * notRandomNumbers.length);
     const winner = notRandomNumbers[idx];
 
+    console.log(notRandomNumbers);
+    console.log(idx);
     console.log(exchangeCoupons[winner]);
 
     let date = new Date();
