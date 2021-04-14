@@ -41,7 +41,7 @@ router.get(
 
     const base64Response = Buffer.from(stringResponse).toString("base64");
 
-    //   res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
+    // res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
     res.redirect(
       "https://premios.sticks.cl/auth/redirect?token=" + base64Response
     );

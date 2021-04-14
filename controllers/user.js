@@ -163,10 +163,21 @@ const addRegisterCoupons = async (email) => {
 };
 
 export const facebookSignUp = async (req, res) => {
-  const { first_name, email } = req.user._json;
+  let { first_name, email } = req.user._json;
   console.log(req.user._json);
   console.log(first_name);
   console.log(email);
+
+  //email = undefined;
+
+  if (!email) {
+    return {
+      error: true,
+      message:
+        "No pudimos obtener el correo electrónico de esta cuenta de Facebook.",
+    };
+  }
+
   try {
     const existingUser = await User.findOne({ email });
     console.log(existingUser);
