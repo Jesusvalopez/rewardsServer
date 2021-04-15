@@ -35,7 +35,7 @@ export const Facebook = passport.use(
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
       proxy: true,
-      profileFields: ["email", "name"],
+      profileFields: ["emails", "name"],
     },
     (accessToken, refreshToken, profile, done) => {
       done(null, profile);
