@@ -6,7 +6,10 @@ import { facebookSignUp, googleSignUp } from "../controllers/user.js";
 
 const router = express.Router();
 
-router.get("/auth/facebook", passport.authenticate("facebook"));
+router.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 router.get(
   "/auth/google",
   passport.authenticate("google", {
