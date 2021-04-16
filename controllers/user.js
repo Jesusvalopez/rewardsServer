@@ -174,7 +174,7 @@ export const facebookSignUp = async (req, res) => {
     return {
       error: true,
       message:
-        "No pudimos obtener el correo electrónico de esta cuenta de Facebook.",
+        "No pudimos obtener el correo electrónico de esta cuenta de Facebook. Intente ingresar con otro de los medios disponibles.",
     };
   }
 
