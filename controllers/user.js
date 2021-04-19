@@ -103,7 +103,15 @@ export const signIn = async (req, res) => {
       { expiresIn: "8h" }
     );
 
-    res.status(200).json({ result: existingUser, token });
+    const stringResponse = encodeURIComponent(
+      JSON.stringify({ result: existingUser, token })
+    );
+
+    const base64Response = Buffer.from(stringResponse).toString("base64");
+
+    //res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
+
+    res.status(200).json({ token: base64Response });
   } catch (error) {
     res.status(500).json({ message: "Algo salió mal" });
   }
@@ -121,6 +129,10 @@ export const signUp = async (req, res) => {
 
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Las contraseñas no coinciden" });
+
+    if (!firstName || !lastName) {
+      return res.status(400).json({ message: "Deben completar el nombre" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -144,7 +156,17 @@ export const signUp = async (req, res) => {
     await updateUserPoints(result._id, 20);
     await addRegisterCoupons(email);
 
-    res.status(200).json({ result: result, token });
+    const stringResponse = encodeURIComponent(
+      JSON.stringify({ result: result, token })
+    );
+
+    const base64Response = Buffer.from(stringResponse).toString("base64");
+
+    //res.redirect("http://localhost:3000/auth/redirect?token=" + base64Response);
+
+    res.status(200).json({ token: base64Response });
+
+    // res.status(200).json({ result: result, token });
   } catch (error) {
     res.status(500).json({ message: "Algo salió mal" });
   }

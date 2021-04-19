@@ -5,6 +5,8 @@ import {
   getUsersCouponsTokens,
   generateApiKey,
   updateUserCommune,
+  signIn,
+  signUp,
 } from "../controllers/user.js";
 import auth from "../middleware/auth.js";
 
@@ -17,6 +19,8 @@ router.get("/get-users-count/", async (req, res) => {
 
   res.send({ usersCount });
 });
+router.post("/signin", signIn);
+router.post("/signup", signUp);
 router.get("/get-users/:email", auth, getUsers);
 router.get("/generate-api-key", auth, generateApiKey);
 router.post("/get-coupons-tokens", auth, getUsersCouponsTokens);
