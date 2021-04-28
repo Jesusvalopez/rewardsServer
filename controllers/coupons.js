@@ -145,8 +145,6 @@ export const getMyCoupons = async (req, res) => {
 
     const coupons = await Coupon.find(findObject);
 
-    console.log(coupons);
-
     res.status(200).json(coupons);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -212,4 +210,15 @@ export const deleteCoupon = async (req, res) => {
   await Coupon.findByIdAndRemove(_id);
 
   res.json({ message: "Cupón eliminado" });
+};
+
+export const expireCoupons = async (req, res) => {
+  const coupons = await Coupon.updateMany(
+    {
+      expireDate: { $lt: Date.now() },
+    },
+    { isExpired: true }
+  );
+
+  return res.status(200).json({ coupons });
 };

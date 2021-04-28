@@ -52,7 +52,7 @@ export const generateApiKey = async (req, res) => {
 
 export const getUsersCouponsTokens = async (req, res) => {
   try {
-    console.log(req.body);
+    
     const coupons = await Coupon.find({
       user: req.body.email,
       deletedAt: { $eq: null },
@@ -67,7 +67,7 @@ export const getUsersCouponsTokens = async (req, res) => {
 };
 export const getUsers = async (req, res) => {
   try {
-    console.log(req.params.email);
+    
 
     const users = await User.find({
       email: { $regex: req.params.email, $options: "i" },
@@ -186,8 +186,7 @@ const addRegisterCoupons = async (email) => {
 
 export const facebookSignUp = async (req, res) => {
   let { first_name, email } = req.user._json;
-  console.log(req.user._json);
-  console.log(first_name);
+
   console.log(email);
 
   //email = undefined;
@@ -202,7 +201,7 @@ export const facebookSignUp = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email });
-    console.log(existingUser);
+   
     if (existingUser) {
       const token = jwt.sign(
         { email: existingUser.email, id: existingUser._id },
@@ -215,7 +214,7 @@ export const facebookSignUp = async (req, res) => {
       return { result: existingUser, token };
       // res.status(200).json({ result: existingUser, token });
     } else {
-      console.log("no existe");
+     
       const pass = crypto
         .createHmac("sha1", email)
         .update(Date.now().toString())
