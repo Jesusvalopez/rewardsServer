@@ -58,10 +58,6 @@ export const getWheelPrize = async (req, res) => {
     const idx = Math.floor(Math.random() * notRandomNumbers.length);
     const winner = notRandomNumbers[idx];
 
-    console.log(notRandomNumbers);
-    console.log(idx);
-    console.log(exchangeCoupons[winner]);
-
     let date = new Date();
 
     const couponData = {
@@ -91,7 +87,9 @@ export const getWheelPrize = async (req, res) => {
       winner,
       coupon,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 export const getWheelData = async (req, res) => {
   try {
