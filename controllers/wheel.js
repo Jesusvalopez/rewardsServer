@@ -88,6 +88,7 @@ export const getWheelPrize = async (req, res) => {
       coupon,
     });
   } catch (error) {
+    console.log("Error wheelPrize: ");
     console.log(error);
   }
 };
