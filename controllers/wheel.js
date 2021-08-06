@@ -19,6 +19,8 @@ export const getWheelPrize = async (req, res) => {
       isUsed: { $eq: false },
     });
 
+    console.log(token)
+
     if (!token) {
       res.status(200).json({
         winner: null,
@@ -26,6 +28,8 @@ export const getWheelPrize = async (req, res) => {
         message: "No tienes tokens para girar la ruleta",
       });
     }
+
+    console.log("hay token")
 
     const tokens = await Coupon.findOneAndUpdate(
       {
