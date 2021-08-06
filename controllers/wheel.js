@@ -21,7 +21,7 @@ export const getWheelPrize = async (req, res) => {
 
     console.log(token)
 
-    if (!token) {
+    if (token == null) {
       res.status(200).json({
         winner: null,
         coupon: null,
