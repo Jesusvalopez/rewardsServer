@@ -21,12 +21,13 @@ export const getWheelPrize = async (req, res) => {
 
     console.log(token)
 
-    if (token == null) {
+    if (!token) {
       res.status(200).json({
         winner: null,
         coupon: null,
         message: "No tienes tokens para girar la ruleta",
       });
+      return false;
     }
 
     console.log("hay token")
