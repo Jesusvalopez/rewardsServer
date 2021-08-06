@@ -42,11 +42,15 @@ export const getWheelPrize = async (req, res) => {
 
     const notRandomNumbers = [];
 
+    //position = order - 1
+
     const generate = [
-      { position: 0, quantity: 10 },
-      { position: 1, quantity: 10 },
-      { position: 2, quantity: 50 },
-      { position: 3, quantity: 30 },
+      { position: 0, quantity: 5 }, // cupon 2000
+      { position: 1, quantity: 40 }, // minis de queso
+      { position: 2, quantity: 30 }, // minis de chocolate
+      { position: 3, quantity: 5 }, // milksha
+      { position: 4, quantity: 15 }, // papas fritas
+      { position: 5, quantity: 5 }, // Classic B
     ];
 
     generate.map((obj) => {
