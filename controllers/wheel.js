@@ -19,7 +19,7 @@ export const getWheelPrize = async (req, res) => {
       isUsed: { $eq: false },
     });
 
-    console.log(token)
+    console.log(token);
 
     if (!token) {
       res.status(200).json({
@@ -30,7 +30,7 @@ export const getWheelPrize = async (req, res) => {
       return false;
     }
 
-    console.log("hay token")
+    console.log("hay token");
 
     const tokens = await Coupon.findOneAndUpdate(
       {
@@ -51,11 +51,11 @@ export const getWheelPrize = async (req, res) => {
 
     const generate = [
       { position: 0, quantity: 5 }, // cupon 2000
-      { position: 1, quantity: 40 }, // minis de queso
+      { position: 1, quantity: 44 }, // minis de queso
       { position: 2, quantity: 30 }, // minis de chocolate
-      { position: 3, quantity: 5 }, // milksha
-      { position: 4, quantity: 15 }, // papas fritas
-      { position: 5, quantity: 5 }, // Classic B
+      { position: 3, quantity: 1 }, // milksha
+      { position: 4, quantity: 19 }, // papas fritas
+      { position: 5, quantity: 1 }, // Classic B
     ];
 
     generate.map((obj) => {
